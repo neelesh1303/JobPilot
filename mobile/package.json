@@ -1,0 +1,16 @@
+{
+  "name": "jobpilot-mobile",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Android app for the JobPilot inbox (connects to your own hosted server)",
+  "dependencies": {
+    "@capacitor/android": "^7.4.0",
+    "@capacitor/background-runner": "^2.3.1",
+    "@capacitor/browser": "^7.0.0",
+    "@capacitor/cli": "^7.4.0",
+    "@capacitor/core": "^7.4.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  }
+}

@@ -1,0 +1,23 @@
+# Render Blueprint for the hosted phone inbox (cloud_app.py).
+# In Render: New > Blueprint > pick your fork. You'll be asked for MONGODB_URI and APP_PASSCODE.
+services:
+  - type: web
+    name: jobpilot-inbox
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn cloud_app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: MONGODB_URI
+        sync: false
+      - key: APP_PASSCODE
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: TIMEZONE
+        value: UTC
+      - key: KEEP_AWAKE_HOURS
+        value: ""

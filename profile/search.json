@@ -1,0 +1,74 @@
+{
+  "_comment": "Settings for the daily job feed (scripts/discover.py). Edit freely. See README > 'Customise the job feed' for every key.",
+
+  "portals": ["linkedin", "naukri", "foundit", "wellfound", "himalayas"],
+  "_portals_note": "naukri and foundit are India-only job boards. Remove them if you search in another country.",
+
+  "country": "India",
+  "country_code": "IN",
+  "allowed_locations": [
+    "india", "bengaluru", "bangalore", "hyderabad", "pune", "chennai", "mumbai", "delhi", "gurgaon",
+    "gurugram", "noida", "kolkata", "ahmedabad", "kochi", "jaipur", "indore", "coimbatore", "chandigarh"
+  ],
+  "_allowed_locations_note": "Non-remote jobs whose location contains none of these words are skipped before scoring. Use [] to allow any location.",
+
+  "candidate": {
+    "about": "Fresher (0 years of experience), open to internships and full-time roles.",
+    "experience_years": 0,
+    "graduation_year": null,
+    "location_rule": "Anywhere in India, or remote from India. Onsite roles outside India don't work.",
+    "paid_only": true
+  },
+
+  "keywords": [
+    "software engineer intern",
+    "software engineer fresher",
+    "backend developer",
+    "full stack developer",
+    "AI engineer",
+    "SDE 1",
+    "associate software engineer",
+    "python developer",
+    "backend intern",
+    "graduate engineer trainee"
+  ],
+  "keywords_per_day": {
+    "linkedin": 2,
+    "naukri": 2,
+    "foundit": 1,
+    "wellfound": 1,
+    "himalayas": 4
+  },
+  "limit_per_keyword": {
+    "linkedin": 15,
+    "naukri": 15,
+    "foundit": 15,
+    "wellfound": 20,
+    "himalayas": 20
+  },
+
+  "title_exclude": [
+    "senior", "sr", "sr.", "lead", "staff", "principal", "director", "head", "architect", "vp",
+    "manager ii", "sde ii", "sde 2", "sde-2", "sde iii", "sde 3",
+    "engineer ii", "engineer iii", "engineer 2", "engineer 3"
+  ],
+  "title_exclude_unless": {
+    "manager": ["product manager intern", "associate product manager", "apm"]
+  },
+  "max_experience_years": 1,
+  "hard_max_years": 2,
+  "min_fit": 80,
+
+  "contacts_for_top": 8,
+  "hunter_per_run": 3,
+  "hunter_reserve": 5,
+  "resumes_for_top": 15,
+  "keep_days": 30,
+
+  "alumni": {
+    "college_names": []
+  },
+  "_alumni_note": "Add your college's full and short names, e.g. [\"Example Institute of Technology\", \"EIT\"], to find alumni at each company. Leave empty to skip.",
+
+  "referral_message": "Hi {first}, I'm {me}. I saw the {role} opening at {company}. I've built {pitch}. Would you be open to referring me, or pointing me to the right person? Happy to share my resume. Thank you!"
+}

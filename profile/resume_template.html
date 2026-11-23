@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ r.name }} – Resume</title>
+<style>
+  @page { size: A4; margin: 0.42in 0.5in; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Charter", "Bitstream Charter", "Cambria", "Georgia", serif; font-size: 9.9pt; line-height: 1.28; color: #111; }
+  a { color: inherit; text-decoration: underline; text-underline-offset: 1.5px; }
+  h1 { font-size: 23pt; text-align: center; margin: 0 0 2px; letter-spacing: .2px; }
+  .contact { text-align: center; font-size: 9.4pt; }
+  .contact span + span::before { content: " | "; color: #333; }
+  h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: .4px; margin: 9px 0 4px; padding-bottom: 1px; border-bottom: .9px solid #111; }
+  .row { display: flex; justify-content: space-between; gap: 12px; }
+  .row b { font-weight: 700; }
+  .sub { font-style: italic; }
+  .entry { margin-bottom: 4px; }
+  ul { margin: 1px 0 3px; padding-left: 16px; }
+  li { margin: 0 0 1px; }
+  .skills div { margin-bottom: 1px; }
+  .summary { margin: 0 0 2px; }
+</style>
+</head>
+<body>
+  <h1>{{ r.name }}</h1>
+  <div class="contact">{% for c in r.contact %}<span>{% if c.href %}<a href="{{ c.href }}">{{ c.text }}</a>{% else %}{{ c.text }}{% endif %}</span>{% endfor %}</div>
+
+  {% if r.summary %}<h2>Summary</h2><p class="summary">{{ r.summary|safe }}</p>{% endif %}
+
+  {% for section in r.get("section_order", ["education", "skills", "projects", "achievements", "leadership"]) %}
+  {% if section == "education" and r.education %}
+  <h2>Education</h2>
+  {% for e in r.education %}
+  <div class="entry">
+    <div class="row"><b>{{ e.school }}</b><b>{{ e.dates }}</b></div>
+    <div class="row sub"><span>{{ e.degree|safe }}</span><span>{{ e.detail|safe }}</span></div>
+  </div>
+  {% endfor %}
+  {% elif section == "skills" and r.skills %}
+  <h2>Technical Skills</h2>
+  <div class="skills">{% for s in r.skills %}<div><b>{{ s.label }}:</b> {{ s["items"]|join(", ") }}</div>{% endfor %}</div>
+  {% elif section == "projects" and r.projects %}
+  <h2>Projects</h2>
+  {% for p in r.projects %}
+  <div class="entry">
+    <div class="row"><b>{{ p.name }}</b><b>{{ p.date }}</b></div>
+    <div class="row sub"><span>{{ p.stack }}</span><span>{% for l in p.links if l.href %}{% if not loop.first %} &nbsp;|&nbsp; {% endif %}<a href="{{ l.href }}">{{ l.text }}</a>{% endfor %}</span></div>
+    <ul>{% for b in p.bullets %}<li>{{ b|safe }}</li>{% endfor %}</ul>
+  </div>
+  {% endfor %}
+  {% elif section == "achievements" and r.achievements %}
+  <h2>Achievements</h2>
+  <ul>{% for a in r.achievements %}<li>{{ a|safe }}</li>{% endfor %}</ul>
+  {% elif section == "leadership" and r.leadership %}
+  <h2>Leadership</h2>
+  {% for l in r.leadership %}
+  <div class="entry">
+    <div class="row"><b>{{ l.title }}</b><b>{{ l.dates }}</b></div>
+    <ul>{% for b in l.bullets %}<li>{{ b|safe }}</li>{% endfor %}</ul>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endfor %}
+</body>
+</html>

@@ -1,0 +1,74 @@
+name: Daily job feed
+
+# Finds, scores and tailors jobs once a day and saves them to MongoDB for the inbox.
+# Needs repository secrets: MONGODB_URI, GEMINI_API_KEY, APIFY_TOKEN (and optionally HUNTER_API_KEY).
+# Optional repository variables (Settings > Secrets and variables > Actions > Variables):
+#   TIMEZONE   e.g. Asia/Kolkata, used to decide whether "today's" feed already ran (default UTC)
+#   INBOX_URL  e.g. https://my-jobpilot.onrender.com, woken up before the run so it's ready when you open it
+# Without the secrets, every run just prints "not configured" and exits successfully.
+
+on:
+  schedule:
+    # Cron times are in UTC. Change them to suit your time zone (04:30 UTC = 10:00 AM in India).
+    # GitHub sometimes delays or drops scheduled runs, so there are two backup slots.
+    # A backup run skips itself if the feed already succeeded today.
+    - cron: "30 4 * * *"   # main run
+    - cron: "45 5 * * *"   # backup
+    - cron: "15 7 * * *"   # backup
+  workflow_dispatch: {}
+
+concurrency: discover
+
+permissions:
+  contents: read
+  actions: write   # lets the run re-enable its own schedule (GitHub disables crons after 60 idle days)
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Check setup and skip if today's feed already ran
+        id: guard
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HAS_SECRETS: ${{ secrets.MONGODB_URI != '' && secrets.GEMINI_API_KEY != '' }}
+          TZ_NAME: ${{ vars.TIMEZONE || 'UTC' }}
+        run: |
+          if [ "$HAS_SECRETS" != "true" ]; then
+            echo "::notice::JobPilot feed not configured yet (add MONGODB_URI and GEMINI_API_KEY secrets). Skipping."
+            echo "run=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          today=$(TZ="$TZ_NAME" date +%F)
+          done=0
+          for c in $(gh api "repos/${{ github.repository }}/actions/workflows/discover.yml/runs?status=success&per_page=20" \
+                       --jq '.workflow_runs[] | select(.id != ${{ github.run_id }}) | .created_at'); do
+            [ "$(TZ="$TZ_NAME" date -d "$c" +%F)" = "$today" ] && done=$((done + 1))
+          done
+          if [ "$done" -gt 0 ]; then echo "Feed already ran today ($today); skipping."; echo "run=false" >> "$GITHUB_OUTPUT"; else echo "run=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Wake the inbox server
+        if: steps.guard.outputs.run == 'true' && vars.INBOX_URL != ''
+        run: curl -s -o /dev/null -m 90 "${{ vars.INBOX_URL }}/healthz" || true
+      - uses: actions/checkout@v4
+        if: steps.guard.outputs.run == 'true'
+      - uses: actions/setup-python@v5
+        if: steps.guard.outputs.run == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+        if: steps.guard.outputs.run == 'true'
+      - name: Find, score and tailor
+        if: steps.guard.outputs.run == 'true'
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: python scripts/discover.py
+      - name: Keep the daily schedule alive
+        if: always() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/discover.yml/enable" || true

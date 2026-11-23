@@ -1,0 +1,100 @@
+{
+  "_comment": "EXAMPLE DATA: replace everything with your own resume. This file is the single source of truth for every tailored resume: tailoring may reorder, select and bold these facts, but never adds new ones. Each project needs a unique 'key' (used by the job scorer) and an optional one-line 'pitch' (used in referral messages). Only 'projects' is printed; 'extra_projects' can be swapped in for roles where they fit better.",
+  "name": "Your Name",
+  "contact": [
+    {"text": "+00 00000 00000"},
+    {"text": "you@example.com", "href": "mailto:you@example.com"},
+    {"text": "linkedin.com/in/your-profile", "href": "https://linkedin.com/in/your-profile"},
+    {"text": "github.com/your-username", "href": "https://github.com/your-username"},
+    {"text": "City, Country"}
+  ],
+  "summary": "",
+  "education": [
+    {
+      "school": "Example University",
+      "dates": "Aug 2022 – May 2026",
+      "degree": "Bachelor of Technology in Computer Science",
+      "detail": "GPA: <b>8.5</b>/10"
+    },
+    {
+      "school": "Example High School",
+      "dates": "2020 – 2022",
+      "degree": "Class XII: <b>90%</b> (2022) &nbsp;|&nbsp; Class X: <b>90%</b> (2020)",
+      "detail": ""
+    }
+  ],
+  "skills": [
+    {"label": "Languages", "items": ["Python", "JavaScript", "C++", "SQL"]},
+    {"label": "Backend & Frontend", "items": ["Node.js", "Express.js", "FastAPI", "Flask", "React.js", "REST APIs"]},
+    {"label": "Databases", "items": ["PostgreSQL", "MongoDB", "Redis", "SQLite"]},
+    {"label": "Cloud & DevOps", "items": ["Docker", "GitHub Actions", "AWS (EC2)", "Git"]},
+    {"label": "Testing & Tools", "items": ["pytest", "Jest", "Postman"]}
+  ],
+  "projects": [
+    {
+      "key": "Task API",
+      "name": "TaskFlow – Team Task Management API",
+      "pitch": "TaskFlow, a FastAPI + PostgreSQL task-management API with JWT auth and CI",
+      "date": "Jan 2026",
+      "stack": "Python, FastAPI, PostgreSQL, Redis, Docker, pytest, GitHub Actions",
+      "links": [{"text": "GitHub", "href": "https://github.com/your-username/taskflow"}],
+      "bullets": [
+        "Built a <b>REST API</b> with FastAPI and PostgreSQL for teams to create, assign and track tasks, with JWT authentication and role-based access.",
+        "Added Redis caching for the most-read endpoints and pagination for large task lists.",
+        "Wrote pytest unit and integration tests and a GitHub Actions pipeline that runs them on every pull request.",
+        "Packaged the service with Docker for one-command local setup and deployment."
+      ]
+    },
+    {
+      "key": "Chat App",
+      "name": "Chatter – Real-Time Chat Application",
+      "pitch": "Chatter, a real-time chat app built with React, Node.js and WebSockets",
+      "date": "Sep 2025",
+      "stack": "React.js, Node.js, Express.js, Socket.IO, MongoDB, Jest",
+      "links": [{"text": "GitHub", "href": "https://github.com/your-username/chatter"}],
+      "bullets": [
+        "Built a real-time chat app with rooms, typing indicators and read receipts using React.js, Express.js and Socket.IO.",
+        "Stored users and message history in MongoDB with indexes for fast room loading.",
+        "Tested the API and socket events with Jest."
+      ]
+    },
+    {
+      "key": "Price Tracker",
+      "name": "PricePing – Price-Drop Alert Bot",
+      "pitch": "PricePing, a Python bot that tracks product prices and sends alerts",
+      "date": "May 2025",
+      "stack": "Python, Flask, SQLite, Docker",
+      "links": [{"text": "GitHub", "href": "https://github.com/your-username/priceping"}],
+      "bullets": [
+        "Built a Python scraper that checks product prices on a schedule and emails users when a price drops below their target.",
+        "Added a small Flask dashboard to manage tracked products, backed by SQLite."
+      ]
+    }
+  ],
+  "extra_projects": [
+    {
+      "key": "ML Classifier",
+      "name": "Spam Detector – Email Classification Model",
+      "pitch": "a spam-classification model trained with scikit-learn and served through a FastAPI endpoint",
+      "date": "Feb 2025",
+      "stack": "Python, scikit-learn, pandas, FastAPI",
+      "links": [{"text": "GitHub", "href": "https://github.com/your-username/spam-detector"}],
+      "bullets": [
+        "Trained a scikit-learn text classifier on a public email dataset and reported precision, recall and a confusion matrix.",
+        "Served the model through a FastAPI endpoint for single and batch predictions."
+      ]
+    }
+  ],
+  "achievements": [
+    "Solved <b>300+ Data Structures and Algorithms problems</b> on LeetCode and other platforms."
+  ],
+  "leadership": [
+    {
+      "title": "Coding Club – Core Member",
+      "dates": "Aug 2023 – May 2025",
+      "bullets": [
+        "Organised workshops and coding contests for students, handling logistics and outreach."
+      ]
+    }
+  ]
+}
